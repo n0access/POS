@@ -1,0 +1,11 @@
+title,body,labels,status
+Setup Django Project,Initialize Django with virtual environment,"planning,backend",Done
+Create GitHub Repo & Connect,Push code to remote GitHub repo,planning,Done
+Design Database Schema,"Plan models for users, products, sales, etc.","planning,database",Backlog
+Implement Authentication,Create login/logout functionality,backend,Backlog
+Create POS Interface,Web interface to add products to cart,frontend,Backlog
+Develop Sales Module,Handle sales transactions and store in DB,"backend,database",Backlog
+Add Inventory Management,Track stock levels and updates,backend,Backlog
+Implement User Roles,Admin vs. cashier permissions,backend,Backlog
+Build Dashboard,Show sales stats, inventory alerts,frontend,Backlog
+Test Core Features,Write tests for major features,testing,Backlog
