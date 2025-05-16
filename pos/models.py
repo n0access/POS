@@ -9,6 +9,7 @@ class Product(models.Model):
     stock_quantity = models.PositiveIntegerField(default=0)
     expiration_date = models.DateField(null=True, blank=True)
     image = models.ImageField(upload_to='product_images/', null=True, blank=True)
+    category = models.CharField(max_length=100)  # New field
 
     def __str__(self):
         return self.name

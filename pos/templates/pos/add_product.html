@@ -28,6 +28,11 @@
         {{ form.description.label_tag }}
         {{ form.description|add_class:"form-control" }}
     </div>
+    <div class="mb-3">
+    {{ form.category.label_tag }}
+    {{ form.category|add_class:"form-control" }}
+    {{ form.category.errors }}
+    </div>
 
     <div class="mb-3">
         {{ form.stock_quantity.label_tag }}
