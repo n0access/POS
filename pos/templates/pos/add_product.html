@@ -1,0 +1,68 @@
+{% extends "pos/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Add Product{% endblock %}
+{% block header %}Add New Product{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="card-custom mx-auto" style="max-width: 600px;">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="mb-3">
+        {{ form.name.label_tag }}
+        {{ form.name|add_class:"form-control" }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.sku.label_tag }}
+        {{ form.sku|add_class:"form-control" }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.price.label_tag }}
+        {{ form.price|add_class:"form-control" }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.description.label_tag }}
+        {{ form.description|add_class:"form-control" }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.stock_quantity.label_tag }}
+        {{ form.stock_quantity|add_class:"form-control" }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.expiration_date.label_tag }}
+        {{ form.expiration_date|add_class:"form-control" }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.image.label_tag }}
+        <label class="image-upload-wrapper">
+            <span><i class="fas fa-upload"></i> Click to upload image</span>
+            {{ form.image }}
+        </label>
+        <img id="imagePreview" class="image-preview d-none" />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Save Product</button>
+</form>
+
+<script>
+    const imageInput = document.querySelector('input[type="file"]');
+    const imagePreview = document.getElementById('imagePreview');
+
+    imageInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            imagePreview.src = URL.createObjectURL(file);
+            imagePreview.classList.remove('d-none');
+        } else {
+            imagePreview.classList.add('d-none');
+        }
+    });
+</script>
+{% endblock %}
