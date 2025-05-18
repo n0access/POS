@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+
+{% block title %}Add New Items{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="table-wrapper">
+        <h2>Add New Items</h2>
+        <form method="post" id="inventoryForm">
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+            <table class="table table-bordered" id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Barcode</th>
+                        <th>Unit Cost</th>
+                        <th>Unit Price</th>
+                        <th>Margin</th>
+                        <th>Quantity</th>
+                        <th>Min Stock Level</th>
+                        <th>Max Stock Level</th>
+                        <th>Product Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="inventory-row">
+                        <td><input type="text" name="form-0-item_name" class="form-control" required></td>
+                        <td><input type="text" name="form-0-barcode" class="form-control"></td>
+                        <td><input type="number" name="form-0-unit_cost" class="form-control" required min="0.01" step="0.01"></td>
+                        <td><input type="number" name="form-0-unit_price" class="form-control" required min="0.01" step="0.01"></td>
+                        <td class="margin-cell">N/A</td>
+                        <td><input type="number" name="form-0-quantity" class="form-control" value="1" required min="1" step="1"></td>
+                        <td><input type="number" name="form-0-min_stock_level" class="form-control" value="1"></td>
+                        <td><input type="number" name="form-0-max_stock_level" class="form-control" value="100"></td>
+                       <td>
+    <select name="form-0-product_category" class="form-control">
+        {% for key, value in category_choices %}
+        <option value="{{ key }}" {% if key == 'SYSTEM' %}selected{% endif %}>
+            {{ value }}
+        </option>
+        {% endfor %}
+    </select>
+</td>
+                        <td></td> <!-- No "Remove" button for the first row -->
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <button type="submit" class="btn btn-primary" name="save">Save Items</button>
+                <a href="{% url 'inventory_list_view' %}" class="btn btn-secondary">Cancel</a>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <script >
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const tableBody = document.querySelector("#inventoryTable tbody");
+
+        function addNewRow() {
+            const formIdx = document.querySelectorAll('.inventory-row').length;
+            const newRowHtml = `
+                <tr class="inventory-row">
+                    <td><input type="text" name="form-${formIdx}-item_name" class="form-control" required></td>
+                    <td><input type="text" name="form-${formIdx}-barcode" class="form-control"></td>
+                <td><input type="number" name="form-${formIdx}-unit_cost" class="form-control" required min="0.01" step="0.01"></td>
+                <td><input type="number" name="form-${formIdx}-unit_price" class="form-control" required min="0.01" step="0.01"></td>
+                <td class="margin-cell">N/A</td>
+                <td><input type="number" name="form-${formIdx}-quantity" class="form-control" value="1" required min="1" step="1"></td>
+                <td><input type="number" name="form-${formIdx}-min_stock_level" class="form-control" value="1"></td>
+                <td><input type="number" name="form-${formIdx}-max_stock_level" class="form-control" value="100"></td>
+                <td><input type="text" name="form-${formIdx}-product_category" class="form-control" value="system"></td>
+                <td><button type="button" class="btn btn-danger remove-row-btn">Remove</button></td>
+            </tr>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', newRowHtml);
+        document.querySelector('input[name="form-TOTAL_FORMS"]').value = formIdx + 1;
+
+        // Automatically focus on the first input in the new row
+        const newInput = tableBody.querySelector('tr:last-child input');
+        newInput.focus();
+    }
+     tableBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('remove-row-btn')) {
+            const row = e.target.closest('tr');
+            const deleteField = row.querySelector('.delete-field');
+            if (deleteField) {
+                deleteField.value = 'on'; // Mark the row as deleted
+            }
+            row.style.display = 'none'; // Hide the row visually
+        }
+    });
+
+    function ensureElementInView(element) {
+        const parent = tableBody.parentElement;
+        const rect = element.getBoundingClientRect();
+        const isInViewVertically = rect.top >= 0 && rect.bottom <= window.innerHeight;
+
+        if (!isInViewVertically) {
+            element.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "start"
+            });
+        }
+    }
+
+    tableBody.addEventListener('keydown', function (e) {
+        const activeElement = document.activeElement;
+        const inputs = Array.from(tableBody.querySelectorAll("input"));
+        const lastInput = inputs[inputs.length - 1];
+
+        if (e.key === 'Tab' && activeElement === lastInput) {
+            // Add a new row when "Tab" is pressed on the last input
+            e.preventDefault();
+            addNewRow();
+        } else if (e.key === 'Tab') {
+            // Ensure that the active element is scrolled into view
+            ensureElementInView(activeElement);
+        }
+    });
+
+    tableBody.addEventListener('input', function (e) {
+        if (e.target.name.includes('unit_cost') || e.target.name.includes('unit_price')) {
+            const row = e.target.closest('.inventory-row');
+            const unitCostInput = row.querySelector('input[name$="unit_cost"]');
+            const unitPriceInput = row.querySelector('input[name$="unit_price"]');
+            const marginCell = row.querySelector('.margin-cell');
+
+            const unitCost = parseFloat(unitCostInput.value) || 0;
+            const unitPrice = parseFloat(unitPriceInput.value) || 0;
+
+            if (marginCell) {
+                if (unitPrice > 0 && unitPrice > unitCost) {
+                    const marginPercentage = ((unitPrice - unitCost) / unitPrice) * 100;
+                    marginCell.textContent = `${marginPercentage.toFixed(2)}%`;
+                } else {
+                    marginCell.textContent = 'N/A';
+                }
+            }
+        }
+    });
+
+    tableBody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('remove-row-btn')) {
+            e.target.closest('tr').remove();
+            document.querySelector('input[name="form-TOTAL_FORMS"]').value = document.querySelectorAll('.inventory-row').length;
+        }
+    });
+
+    const inventoryForm = document.querySelector("#inventoryForm");
+    inventoryForm.addEventListener('submit', function (e) {
+        const rows = document.querySelectorAll('.inventory-row');
+        let valid = true;
+
+        rows.forEach(row => {
+            const unitCostInput = row.querySelector('input[name$="unit_cost"]');
+            const unitPriceInput = row.querySelector('input[name$="unit_price"]');
+
+            const unitCost = parseFloat(unitCostInput.value) || 0;
+            const unitPrice = parseFloat(unitPriceInput.value) || 0;
+
+            if (unitCost <= 0 || unitPrice <= 0) {
+                alert('Unit cost and unit price must be strictly positive.');
+                unitCostInput.focus();
+                valid = false;
+            } else if (unitCost >= unitPrice) {
+                alert('Unit cost must be strictly less than unit price.');
+                valid = false;
+                unitCostInput.focus();
+            }
+        });
+
+        if (!valid) {
+            e.preventDefault(); // Prevent form submission if validation fails
+        }
+    });
+
+});
+
+</script>
+
+    <script>
+    let isFormDirty = false;
+
+    // Mark form as dirty when the user interacts with it
+    document.querySelector('form').addEventListener('change', () => {
+        isFormDirty = true;
+    });
+
+    // Warn the user before leaving the page
+    window.addEventListener('beforeunload', (event) => {
+        if (isFormDirty) {
+            event.preventDefault();
+            event.returnValue = ''; // Required for modern browsers to show the dialog
+        }
+    });
+
+    // Reset the dirty flag when the form is submitted
+    document.querySelector('form').addEventListener('submit', () => {
+        isFormDirty = false;
+    });
+</script>
+
+    <script>
+    document.querySelector('form').addEventListener('submit', (event) => {
+        const userConfirmed = confirm('Are you sure you want to save these changes?');
+        if (!userConfirmed) {
+            event.preventDefault(); // Prevent form submission if the user cancels
+        }
+    });
+
+
+</script>
+
+
+{% endblock %}
