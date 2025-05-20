@@ -1,125 +1,98 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <title>{% block title %}Inventory App{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>{% block title %}Inventory Management{% endblock %}</title>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-  <style>
-    body {
-      display: flex;
-      min-height: 100vh;
-      background-color: #f8f9fa;
-    }
-    .sidebar {
-      width: 250px;
-      background-color: #343a40;
-      color: white;
-      padding: 20px;
-      flex-shrink: 0;
-    }
-    .sidebar .nav-link {
-      color: white;
-    }
-    .sidebar .nav-link:hover,
-    .sidebar .nav-link.active {
-      background-color: #0d6efd;
-      color: white;
-    }
-    .content {
-      flex-grow: 1;
-      padding: 20px;
-    }
-    .collapse .nav-link {
-      padding-left: 1.5rem;
-    }
-  </style>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+        }
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
 <body>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="bg-dark text-white sidebar p-3">
+        <h4 class="mb-4">Dashboard</h4>
+        <ul class="nav flex-column">
 
-  <!-- Sidebar -->
-  <nav class="sidebar">
-    <h4 class="mb-4">Inventory</h4>
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-toggle="collapse" href="#dashboardMenu" role="button">
-          <i class="bi bi-speedometer2"></i> Dashboards
-        </a>
-        <div class="collapse" id="dashboardMenu">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="{% url 'dashboard' %}" class="nav-link">Main Dashboard</a></li>
-          </ul>
-        </div>
-      </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'dashboard' %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-toggle="collapse" href="#transactionMenu" role="button">
-          <i class="bi bi-receipt"></i> Transactions
-        </a>
-        <div class="collapse" id="transactionMenu">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="{% url 'inventory_list_view' %}" class="nav-link">View Inventory</a></li>
-            <li><a href="{% url 'inventory_create_view' %}" class="nav-link">Add Item</a></li>
-            <li><a href="{% url 'upload_inventory' %}" class="nav-link">Bulk Update</a></li>
-            <li><a href="{% url 'purchase_order_list' %}" class="nav-link">View POs</a></li>
-            <li><a href="{% url 'create_purchase_order' %}" class="nav-link">Add PO</a></li>
-            <li><a href="{% url 'lookup_po' %}" class="nav-link">Receive PO</a></li>
-          </ul>
-        </div>
-      </li>
+            <!-- Inventory -->
+            <li class="nav-item">
+                <a class="nav-link text-white" data-bs-toggle="collapse" href="#inventoryMenu" role="button" aria-expanded="false">
+                    <i class="bi bi-box-seam"></i> Inventory
+                </a>
+                <div class="collapse ps-3" id="inventoryMenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'inventory_list_view' %}">View Items</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'inventory_create_view' %}">Add Item</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'upload_inventory' %}">Bulk Update</a></li>
+                    </ul>
+                </div>
+            </li>
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-toggle="collapse" href="#vendorMenu" role="button">
-          <i class="bi bi-people"></i> Vendors
-        </a>
-        <div class="collapse" id="vendorMenu">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a href="{% url 'vendor_list_view' %}" class="nav-link">View Vendors</a></li>
-            <li><a href="{% url 'vendor_create_view' %}" class="nav-link">Add Vendor</a></li>
-          </ul>
-        </div>
-      </li>
+            <!-- Purchase Orders -->
+            <li class="nav-item">
+                <a class="nav-link text-white" data-bs-toggle="collapse" href="#poMenu" role="button" aria-expanded="false">
+                    <i class="bi bi-receipt-cutoff"></i> Purchase Orders
+                </a>
+                <div class="collapse ps-3" id="poMenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'purchase_order_list' %}">View POs</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'create_purchase_order' %}">Add PO</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'lookup_po' %}">Receive PO</a></li>
+                    </ul>
+                </div>
+            </li>
 
-      <li class="nav-item mt-4">
-        <a href="{% url 'logout' %}" class="nav-link text-danger">
-          <i class="bi bi-box-arrow-right"></i> Sign Out
-        </a>
-      </li>
-    </ul>
-  </nav>
+            <!-- Vendors -->
+            <li class="nav-item">
+                <a class="nav-link text-white" data-bs-toggle="collapse" href="#vendorMenu" role="button" aria-expanded="false">
+                    <i class="bi bi-person-badge"></i> Vendors
+                </a>
+                <div class="collapse ps-3" id="vendorMenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'vendor_list_view' %}">View Vendors</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'vendor_create_view' %}">Add Vendor</a></li>
+                    </ul>
+                </div>
+            </li>
 
-  <!-- Content Area -->
-  <main class="content">
-    {% block content %}
-    <!-- Page-specific content goes here -->
-    {% endblock %}
-  </main>
+            <!-- Role Display -->
+            <li class="nav-item mt-4">
+                <span class="text-muted small">Role: {{ user_role }}</span>
+            </li>
+        </ul>
+    </div>
 
-  <!-- Bootstrap JS (for collapse) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main Content -->
+    <div class="flex-grow-1 p-4">
+        {% block content %}
+        <!-- Page-specific content goes here -->
+        {% endblock %}
+    </div>
+</div>
 
-  <!-- Active Menu Script -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const currentPath = window.location.pathname;
-      document.querySelectorAll('.btn-toggle-nav a').forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-          link.classList.add('active');
-          const collapse = link.closest('.collapse');
-          if (collapse) {
-            collapse.classList.add('show');
-            const trigger = document.querySelector(`[href="#${collapse.id}"]`);
-            if (trigger) trigger.classList.remove('collapsed');
-          }
-        }
-      });
-    });
-  </script>
-
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
