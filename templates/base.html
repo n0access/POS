@@ -1,303 +1,125 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Management</title>
+  <meta charset="UTF-8">
+  <title>{% block title %}Inventory App{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/collection/components/icon/icon.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap');
-
-        body {
-            font-family: 'Source Sans Pro', sans-serif;
-            background-color: #fefefe;
-            margin: 0;
-            overflow-y: scroll;
-        }
-
-        a {
-            text-decoration: none;
-            transition: all 0.5s ease;
-        }
-
-        .app {
-            display: flex;
-            height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 17em;
-            height: 100%;
-            position: fixed;
-            background-color: #19222a;
-            color: white;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar header {
-            background-color: #09f;
-            padding: 1em;
-            text-align: center;
-            font-size: 1.5rem;
-            color: white;
-            font-weight: bold;
-        }
-
-        .sidebar-nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar-nav ul li {
-            position: relative;
-        }
-
-        .sidebar-nav ul li a {
-            color: rgba(255, 255, 255, 0.9);
-            display: block;
-            padding: 1em;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-        }
-
-        .sidebar-nav ul li a:hover, .sidebar-nav ul li.active > a {
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-
-        .sidebar-nav ul li a i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        /* Submenu (Flyout) */
-        .nav-flyout {
-            display: none;
-            background-color: #2a343c;
-            margin-left: 1em;
-            padding: 0;
-            list-style: none;
-            border-left: 3px solid #09f;
-            transition: all 0.3s ease;
-        }
-
-        .nav-flyout li a {
-            padding: 0.75em 1em;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-            transition: background-color 0.3s ease;
-        }
-
-        .nav-flyout li a:hover {
-            background-color: #485460;
-            color: white;
-        }
-
-        /* Toggle Submenu */
-        .sidebar-nav ul li.open > .nav-flyout {
-            display: block;
-        }
-
-        /* Content Area */
-        .content-area {
-            margin-left: 17em; /* Push the content to the right of the sidebar */
-            padding: 2em;
-            flex-grow: 1;
-            background-color: #f8f9fa;
-        }
-
-        /* Mobile View */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: absolute;
-                width: 100%;
-                height: auto;
-                z-index: 1050;
-            }
-
-            .content-area {
-                margin-left: 0;
-            }
-        }
-    </style>
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #343a40;
+      color: white;
+      padding: 20px;
+      flex-shrink: 0;
+    }
+    .sidebar .nav-link {
+      color: white;
+    }
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      background-color: #0d6efd;
+      color: white;
+    }
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+    }
+    .collapse .nav-link {
+      padding-left: 1.5rem;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="app">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <header>
-                <button class="btn btn-light d-md-none" id="sidebarToggle">
-                 <i class="bi bi-list"></i> Menu
-                </button>
-    <h1 class="text-white text-center">Menu</h1>
-            </header>
-            <nav class="sidebar-nav">
-                <ul>
-                    <!-- Dashboards -->
-                    <li class="active">
-                        <a href="#">
-                            <i class="ion-bag"></i>
-                            <span>Dashboards</span>
-                        </a>
-                        <ul class="nav-flyout">
-                            <li>
-                                <a href="{% url 'dashboard' %}">
-                                    <i class="ion-ios-color-filter-outline"></i> Main Dashboard
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- Buy -->
-                      <li>
-                        <a href = "#">
-                            <i class = "ion-bag"></i>
-                            <span>Transactions</span>
-                         </a>
-                         <ul class = "nav-flyout">
-                          <!-- Inventory -->
-                    <li>
-                        <a href="#">
-                            <i class="ion-ios-settings"></i>
-                            <span>Inventory</span>
-                        </a>
-                        <ul class="nav-flyout">
-                            <li>
-                                <a href="{% url 'inventory_list_view' %}">
-                                    <i class="ion-ios-alarm-outline"></i> View Inventory
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'inventory_create_view' %}">
-                                    <i class="ion-ios-camera-outline"></i> Add Item
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'upload_inventory' %}">
-                                    <i class="ion-ios-chatboxes-outline"></i> Bulk Update
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <h4 class="mb-4">Inventory</h4>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-toggle="collapse" href="#dashboardMenu" role="button">
+          <i class="bi bi-speedometer2"></i> Dashboards
+        </a>
+        <div class="collapse" id="dashboardMenu">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a href="{% url 'dashboard' %}" class="nav-link">Main Dashboard</a></li>
+          </ul>
+        </div>
+      </li>
 
-                     <!-- Purchase Orders -->
-                    <li>
-                        <a href="#">
-                            <i class="ion-ios-briefcase-outline"></i>
-                            <span>Purchase Orders</span>
-                        </a>
-                        <ul class="nav-flyout">
-                            <li>
-                                <a href="{% url 'purchase_order_list' %}">
-                                    <i class="ion-ios-flame-outline"></i> View POs
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'create_purchase_order' %}">
-                                    <i class="ion-ios-lightbulb-outline"></i> Add PO
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'lookup_po' %}">
-                                    <i class="ion-ios-lightbulb-outline"></i> Receive PO
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-toggle="collapse" href="#transactionMenu" role="button">
+          <i class="bi bi-receipt"></i> Transactions
+        </a>
+        <div class="collapse" id="transactionMenu">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a href="{% url 'inventory_list_view' %}" class="nav-link">View Inventory</a></li>
+            <li><a href="{% url 'inventory_create_view' %}" class="nav-link">Add Item</a></li>
+            <li><a href="{% url 'upload_inventory' %}" class="nav-link">Bulk Update</a></li>
+            <li><a href="{% url 'purchase_order_list' %}" class="nav-link">View POs</a></li>
+            <li><a href="{% url 'create_purchase_order' %}" class="nav-link">Add PO</a></li>
+            <li><a href="{% url 'lookup_po' %}" class="nav-link">Receive PO</a></li>
+          </ul>
+        </div>
+      </li>
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-toggle="collapse" href="#vendorMenu" role="button">
+          <i class="bi bi-people"></i> Vendors
+        </a>
+        <div class="collapse" id="vendorMenu">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a href="{% url 'vendor_list_view' %}" class="nav-link">View Vendors</a></li>
+            <li><a href="{% url 'vendor_create_view' %}" class="nav-link">Add Vendor</a></li>
+          </ul>
+        </div>
+      </li>
 
+      <li class="nav-item mt-4">
+        <a href="{% url 'logout' %}" class="nav-link text-danger">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </a>
+      </li>
+    </ul>
+  </nav>
 
-                         </ul>
-                      </li>
+  <!-- Content Area -->
+  <main class="content">
+    {% block content %}
+    <!-- Page-specific content goes here -->
+    {% endblock %}
+  </main>
 
+  <!-- Bootstrap JS (for collapse) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-                    <!-- Vendors -->
-                    <li>
-                        <a href="#">
-                            <i class="ion-ios-briefcase-outline"></i>
-                            <span>Vendors</span>
-                        </a>
-                        <ul class="nav-flyout">
-                            <li>
-                                <a href="{% url 'vendor_list_view' %}">
-                                    <i class="ion-ios-flame-outline"></i> View Vendors
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'vendor_create_view' %}">
-                                    <i class="ion-ios-lightbulb-outline"></i> Add Vendor
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-
-
-                    <!-- Sign Out -->
-                    <li class="nav-item mt-4">
-                        <a href="{% url 'logout' %}" class="nav-link text-danger d-flex align-items-center">
-                            <i class="bi bi-box-arrow-right me-2"></i> Sign Out
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Content Area -->
-        <main class="content-area">
-            {% block content %}
-            <h1>Welcome to the Dashboard</h1>
-            <p>Manage your inventory seamlessly with a modern interface.</p>
-            {% endblock %}
-        </main>
-    </div>
-
-
-<script>
+  <!-- Active Menu Script -->
+  <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const menuItems = document.querySelectorAll('.sidebar-nav ul li > a');
-
-        menuItems.forEach(menu => {
-            menu.addEventListener('click', function (event) {
-                const parentLi = this.parentElement;
-                const submenu = parentLi.querySelector('.nav-flyout');
-
-                if (submenu) {
-                    event.preventDefault(); // Prevent default link behavior
-                    parentLi.classList.toggle('open'); // Toggle open class
-                    submenu.setAttribute('aria-expanded', parentLi.classList.contains('open'));
-                }
-            });
-        });
+      const currentPath = window.location.pathname;
+      document.querySelectorAll('.btn-toggle-nav a').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+          const collapse = link.closest('.collapse');
+          if (collapse) {
+            collapse.classList.add('show');
+            const trigger = document.querySelector(`[href="#${collapse.id}"]`);
+            if (trigger) trigger.classList.remove('collapsed');
+          }
+        }
+      });
     });
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const sidebar = document.querySelector('.sidebar');
-        const toggleButton = document.getElementById('sidebarToggle');
-
-        toggleButton.addEventListener('click', function () {
-            sidebar.classList.toggle('d-none');
-        });
-    });
-</script>
+  </script>
 
 </body>
 </html>
