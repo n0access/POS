@@ -1,0 +1,107 @@
+
+#vendor-results {
+    position: absolute;
+    background-color: #fff; /* Ensure dropdown is visible */
+    border: 1px solid #ccc; /* Define dropdown border */
+    z-index: 1050; /* Higher than Bootstrap modals */
+    max-height: 200px; /* Allow scrolling for long lists */
+    overflow-y: auto; /* Enable vertical scrolling */
+    width: 100%; /* Match the input width */
+}
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    z-index: 1050; /* Ensure it shows above other elements */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    max-height: 200px; /* Optional: Limit height */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    width: 100%; /* Match the input field width */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.dropdown-item.active {
+    background-color: #007bff; /* Highlight active item */
+    color: #fff;
+}
+
+
+.item-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.item-row div {
+    flex: 1;
+}
+
+#item-formset-container {
+    margin-bottom: 1rem;
+}
+
+.table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+        }
+        .vendor-details {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        @media print {
+            .btn, .form-control, .list-group {
+                display: none;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 5px;
+                text-align: left;
+            }
+        }
+ input.form-control, select.form-control, textarea.form-control {
+     background-color: #f9f9f9; /* Light grey background */
+     border: 1px solid #6b797c; /* Border to distinguish */
+     border-radius: 4px; /* Slightly rounded corners */
+     padding: 10px; /* Better spacing inside */
+     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Slight inner shadow */
+     transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth effect on focus */
+ }
+
+input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
+    background-color: #fff; /* White background when focused */
+    border-color: #007bff; /* Highlighted border color */
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5); /* Subtle blue glow */
+    outline: none; /* Remove default outline */
+}
+
+/* Specific styles for dropdowns */
+select.form-control {
+    appearance: none; /* Removes default browser dropdown styling */
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23ced4da" d="M2 0L0 2h4zM0 3l2 2 2-2z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 10px;
+    padding-right: 30px; /* Ensures space for custom dropdown arrow */
+}
+
+select.form-control:hover {
+    border-color: #0056b3; /* Slightly darker border on hover */
+}
+
+/* Disabled fields */
+select.form-control:disabled, input.form-control:disabled, textarea.form-control:disabled {
+    background-color: #e9ecef; /* Lighter grey for disabled fields */
+    cursor: not-allowed; /* Indicates non-interactive fields */
+    opacity: 0.8;
+}

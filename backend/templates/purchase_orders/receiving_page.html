@@ -1,0 +1,155 @@
+{% extends "base.html"%}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receiving Items for PO: {{ purchase_order.purchase_order_id }}</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <style>
+        .button-group {
+            margin-top: 20px;
+        }
+        .button-group button {
+            margin-right: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Receiving for PO: {{ purchase_order.purchase_order_id }}</h1>
+    <p><strong>Vendor:</strong> {{ purchase_order.vendor.company_name }}</p>
+    <p><strong>Order Date:</strong> {{ purchase_order.order_date }}</p>
+    <p><strong>Expected Date:</strong> {{ purchase_order.expected_date }}</p>
+
+    <form id="receiving-form" method="post">
+        {% csrf_token %}
+        <label for="received_date">Received Date:</label>
+        <input type="date" id="received_date" name="received_date" value="{{ today_date|date:'Y-m-d' }}">
+
+        <table id="receiving-table" class="display">
+            <thead>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Description</th>
+                    <th>Quantity Ordered</th>
+                    <th>Received Quantity</th>
+                    <th>Expiration Date</th>
+                    <th>Is Accepted</th>
+                    <th>Rejection Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in purchase_order.items.all %}
+                <tr>
+                    <td>{{ item.item.item_id|stringformat:"s" }}</td>
+                    <td>{{ item.item_desc }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>
+                        <input type="number" name="received_quantity_{{ item.id }}" value="0" min="0" class="received-quantity">
+                    </td>
+                    <td>
+                        <input type="date" name="expiration_date_{{ item.id }}" value="{{ default_expiration_date|date:'Y-m-d' }}">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="is_accepted_{{ item.id }}" class="is-accepted" checked>
+                    </td>
+                    <td>
+                        <select name="rejection_reason_{{ item.id }}" disabled>
+                            <option value="">-- Select --</option>
+                            <option value="Expired">Expired</option>
+                            <option value="Short Date">Short Date</option>
+                            <option value="Damaged">Damaged</option>
+                            <option value="Late Delivery">Late Delivery</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="button-group">
+            <button type="submit" style="background-color: #28a745; color: white;">Submit</button>
+            <a href="{% url 'lookup_po' %}" style="background-color: #dc3545; color: white; padding: 10px 15px; text-decoration: none;">Cancel</a>
+        </div>
+    </form>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#receiving-table').DataTable({
+                paging: true,          // Enable pagination
+                searching: true,       // Enable search
+                ordering: true,        // Enable sorting
+                pageLength: 10,        // Number of rows per page
+                lengthChange: false    // Disable ability to change rows per page
+            });
+
+            // Disable rejection reason if "Is Accepted" is checked
+            document.querySelectorAll('.is-accepted').forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                const reasonField = row.querySelector('select');
+
+                checkbox.addEventListener('change', () => {
+                    reasonField.disabled = checkbox.checked;
+                    if (checkbox.checked) reasonField.value = ''; // Clear rejection reason if accepted
+                });
+            });
+        });
+
+     function cancelReceiving() {
+            if (confirm("Are you sure you want to cancel? Any unsaved data will be lost.")) {
+                window.location.href = "{% url 'lookup_po' %}"; // Redirect to the PO Lookup Page
+            }
+        }
+
+        document.getElementById('receiving-form').addEventListener('submit', function(event) {
+            let zeroQuantityItems = [];
+            let acceptedItems = document.querySelectorAll('.is-accepted:checked');
+
+            acceptedItems.forEach((checkbox) => {
+                const row = checkbox.closest('tr');
+                const receivedQuantityInput = row.querySelector('.received-quantity');
+                const receivedQuantity = parseInt(receivedQuantityInput.value, 10);
+
+                if (receivedQuantity === 0) {
+                    const itemId = row.querySelector('td').innerText; // Get the Item ID
+                    zeroQuantityItems.push(itemId);
+                }
+            });
+
+            if (zeroQuantityItems.length > 0) {
+                const confirmMessage = `The following accepted items have a received quantity of zero:\n\n` +
+                                       `${zeroQuantityItems.join(', ')}\n\n` +
+                                       `Are you sure you want to proceed?`;
+                if (!confirm(confirmMessage)) {
+                    event.preventDefault(); // Cancel form submission
+                }
+            }
+        });
+
+        // Disable rejection reason if "Is Accepted" is checked
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.is-accepted').forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                const reasonField = row.querySelector('select');
+
+                checkbox.addEventListener('change', () => {
+                    reasonField.disabled = checkbox.checked;
+                    if (checkbox.checked) reasonField.value = ''; // Clear rejection reason if accepted
+                });
+            });
+        });
+    </script>
+</body>
+{% endblock %}
+
+
+

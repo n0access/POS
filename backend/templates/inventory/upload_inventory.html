@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}  <!-- Load the static tag library here -->
+{% block title %}Upload Inventory{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Upload Inventory File</h2>
+    <p><a href="{% url 'download_template' %}" class="btn btn-primary"}>Download Template</a> Please use the bulk upload template to prepare your file. Ensure the file includes all required columns.
+    </p>
+
+    <form action="{% url 'upload_inventory' %}" method="post" enctype="multipart/form-data" class="mb-4">
+        {% csrf_token %}
+        <input type="file" name="file" accept=".csv, .xls, .xlsx" class="form-control mb-2" required>
+        <button type="submit" class="btn btn-primary">Upload File</button>
+    </form>
+
+    {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if preview_data %}
+        <h3>Preview Uploaded Data</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    {% for col in preview_data.0.keys %}
+                        <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in preview_data %}
+                    <tr>
+                        {% for value in row.values %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form method="post" action="{% url 'upload_inventory' %}">
+            {% csrf_token %}
+            <input type="hidden" name="confirm" value="true">
+            <button type="submit" class="btn btn-success">Confirm Upload</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

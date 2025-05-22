@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Import Inventory</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="file">Select CSV File:</label>
+    <input type="file" name="file" id="file" required>
+    <button type="submit">Upload</button>
+</form>
+
+{% if result %}
+    <h3>Import Result</h3>
+    <pre>{{ result }}</pre>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Inventory List{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h1>Inventory List</h1>
+
+    <table id="inventoryTable" class="display nowrap table table-bordered table-hover align-middle" style="width:100%">
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>Category</th>
+                <th>Average Unit Cost</th>
+                <th>Average Unit Price</th>
+                <th>Total Quantity</th>
+                <th>Status</th>
+                <th>Min Stock</th>
+                <th>Max Stock</th>
+                <th>Closest Expiration Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.item_id }}</td>
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.product_category }}</td>
+                <td>${{ item.unit_cost|floatformat:2|default:"0.00" }}</td>
+                <td>${{ item.unit_price|floatformat:2|default:"0.00" }}</td>
+                 <td>{{ item.quantity|default:"0" }}</td>
+                <td>{{ item.status }}</td>
+                <td>{{ item.min_stock_level }}</td>
+                <td>{{ item.max_stock_level }}</td>
+                <td>{{ item.closest_expiration_date|date:"Y-m-d"|default:"N/A" }}</td>
+                <td>
+                    <a href="{% url 'inventory_update_view' item.item_id %}" class="btn btn-warning btn-sm">Edit</a>
+                    {% if item.status|lower == 'active' %}
+                    <a href="{% url 'inventory_delete_view' item.item_id %}" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Are you sure you want to deactivate this item?');">Deactivate</a>
+                    {% else %}
+                    <a href="{% url 'inventory_activate_view' item.item_id %}" class="btn btn-success btn-sm">Activate</a>
+                    {% endif %}
+                    <a href="{% url 'batch_create_view' item.item_id %}" class="btn btn-secondary btn-sm">Add Batch</a>
+                </td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#inventoryTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'print'
+            ],
+            pageLength: 10,
+            order: [[0, 'desc']],
+            columnDefs: [
+                { targets: [10], orderable: false }  // Disable sorting for the "Actions" column
+            ]
+        });
+    });
+</script>
+{% endblock %}

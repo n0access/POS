@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Bulk Update Inventory{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h2>Bulk Update Inventory</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table id="bulkTable" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Item Name</th>
+                    <th>Unit Cost</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Min Stock Level</th>
+                    <th>Max Stock Level</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.item_id }}</td>
+                    <td contenteditable="true">{{ item.item_name }}</td>
+                    <td contenteditable="true">{{ item.unit_cost }}</td>
+                    <td contenteditable="true">{{ item.unit_price }}</td>
+                    <td contenteditable="true">{{ item.quantity }}</td>
+                    <td contenteditable="true">{{ item.min_stock_level }}</td>
+                    <td contenteditable="true">{{ item.max_stock_level }}</td>
+                    <td contenteditable="true">{{ item.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{% url 'inventory_list_view' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

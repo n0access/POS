@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Upload Inventory{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h2>Upload Inventory File</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="inventoryFile">Select Inventory File (CSV):</label>
+            <input type="file" class="form-control-file" id="inventoryFile" name="inventoryFile">
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Upload</button>
+    </form>
+</div>
+{% endblock %}

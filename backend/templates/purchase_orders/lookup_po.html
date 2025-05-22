@@ -1,0 +1,37 @@
+{% extends "base.html"%}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lookup PO</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+    <h1>Lookup Purchase Order</h1>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li style="color: red;">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form method="post" action="{% url 'lookup_po' %}">
+        {% csrf_token %}
+        <label for="po_number">Purchase Order Number:</label>
+        <input type="text" id="po_number" name="po_number" autocomplete="off">
+        <button type="submit">Search</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $('#po_number').autocomplete({
+                source: '/api/purchase_orders/autocomplete/', // Adjust to match your autocomplete endpoint
+                minLength: 2
+            });
+        });
+    </script>
+</body>
+{% endblock %}
