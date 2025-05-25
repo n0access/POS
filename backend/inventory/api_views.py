@@ -13,8 +13,8 @@ from rest_framework.permissions import IsAuthenticated
 class InventoryItemViewSet (viewsets.ModelViewSet):
     queryset = InventoryItem.objects.all ( )
     serializer_class = InventoryItemSerializer
-    authentication_classes = [ TokenAuthentication ]  # ✅ Requires Token Authentication
-    permission_classes = [ IsAuthenticated ]  # 🔒 Restrict access to authenticated users
+   # authentication_classes = [ TokenAuthentication ]  # ✅ Requires Token Authentication
+   # permission_classes = [ IsAuthenticated ]  # 🔒 Restrict access to authenticated users
     parser_classes = [ MultiPartParser ]  # For file upload
 
     @action (detail = False, methods = [ 'get' ])
