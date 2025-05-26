@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // Component Imports
-import { Menu, MenuItem } from '@menu/vertical-menu'
+import { Menu, MenuItem, SubMenu } from '@menu/vertical-menu'
 
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
@@ -57,9 +57,10 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
           Home
         </MenuItem>
 
-        <MenuItem href='/items' icon={<i className='ri-box-3-line' />}>
-          Items & Inventory
-        </MenuItem>
+        <SubMenu label='Items & Inventory' icon={<i className='ri-box-3-line' />}>
+          <MenuItem href='/items'>Items</MenuItem>
+          <MenuItem href='/inventory'>Inventory Management</MenuItem>
+        </SubMenu>
 
         <MenuItem href='/orders' icon={<i className='ri-file-list-3-line' />}>
           Orders & Payments
@@ -73,9 +74,10 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
           Reports
         </MenuItem>
 
-        <MenuItem href='/staff' icon={<i className='ri-team-line' />}>
-          Staff
-        </MenuItem>
+        <SubMenu label='Staff' icon={<i className='ri-team-line' />}>
+          <MenuItem href='/staff'>Team Members</MenuItem>
+          <MenuItem href='/roles'>Roles & Permissions</MenuItem>
+        </SubMenu>
 
         <MenuItem href='/banking' icon={<i className='ri-bank-line' />}>
           Banking
