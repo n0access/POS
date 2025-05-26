@@ -11,9 +11,8 @@ import '@/app/globals.css'
 import '@assets/iconify-icons/generated-icons.css'
 
 export const metadata = {
-  title: 'Demo: Materio - NextJS Dashboard Free',
-  description:
-    'Develop next-level web apps with Materio Dashboard Free - NextJS. Now, updated with lightning-fast routing powered by MUI and App router.'
+  title: 'Primetill — Smart POS System',
+  description: 'Primetill helps you manage inventory, staff, and sales in one intuitive dashboard.'
 }
 
 const RootLayout = ({ children }: ChildrenType) => {

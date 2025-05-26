@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Paper, Typography, Button, TablePagination
@@ -60,7 +61,13 @@ const ItemsPage = () => {
   return (
     <div className='p-4'>
       <Typography variant='h5' gutterBottom>Items</Typography>
-      <Button variant='contained' color='primary' className='mb-4'>Add New Item</Button>
+
+
+<Link href='/items/create' passHref>
+  <Button variant='contained' color='primary' className='mb-4'>
+    Add New Item
+  </Button>
+</Link>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
