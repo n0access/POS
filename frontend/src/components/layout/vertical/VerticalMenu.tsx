@@ -62,10 +62,15 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
           <MenuItem href='/inventory'>Inventory Management</MenuItem>
         </SubMenu>
 
-        <MenuItem href='/orders' icon={<i className='ri-file-list-3-line' />}>
-          Orders & Payments
-        </MenuItem>
-
+        <SubMenu label='Orders & Payments' icon={<i className='ri-file-list-3-line' />}>
+           <MenuItem href='/orders/create'>Create Purchase Order</MenuItem>
+           <MenuItem href='/orders'>View Purchase Orders</MenuItem>
+           <MenuItem href='/orders/receive'>Receive Items</MenuItem>
+        </SubMenu>
+      <SubMenu label='Vendors' icon={<i className='ri-truck-line' />}>
+  <MenuItem href='/vendors'>View Vendors</MenuItem>
+  <MenuItem href='/vendors/create'>Add Vendor</MenuItem>
+</SubMenu>
         <MenuItem href='/customers' icon={<i className='ri-user-line' />}>
           Customers
         </MenuItem>
