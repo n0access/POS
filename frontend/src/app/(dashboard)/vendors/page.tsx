@@ -24,12 +24,11 @@ const ViewVendorsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://localhost:8000/api/vendors/', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Token 989701b42872aae835d0decab95d24e81e6c2689'
-          }
-        })
+       const res = await fetch('http://localhost:8000/api/vendors/', {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
 
         const data = await res.json()
         setVendors(data)
