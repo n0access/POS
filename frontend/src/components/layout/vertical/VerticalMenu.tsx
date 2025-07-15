@@ -59,6 +59,7 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
 
         <SubMenu label='Items & Inventory' icon={<i className='ri-box-3-line' />}>
           <MenuItem href='/items'>Items</MenuItem>
+          <MenuItem href='/items/create'>Add New Item</MenuItem>
           <MenuItem href='/inventory'>Inventory Management</MenuItem>
         </SubMenu>
 
