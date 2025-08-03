@@ -54,35 +54,53 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
         menuSectionStyles={menuSectionStyles(theme)}
       >
         <MenuItem href='/dashboard' icon={<i className='ri-home-5-line' />}>
-          Home
+          Dashboard
         </MenuItem>
 
-        <SubMenu label='Items & Inventory' icon={<i className='ri-box-3-line' />}>
-          <MenuItem href='/items'>Items</MenuItem>
-          <MenuItem href='/items/create'>Add New Item</MenuItem>
-          <MenuItem href='/inventory'>Inventory Management</MenuItem>
-        </SubMenu>
+        <MenuItem href='/pos' icon={<i className='ri-shopping-cart-2-line' />}>
+          Point of Sale
+        </MenuItem>
 
-        <SubMenu label='Orders & Payments' icon={<i className='ri-file-list-3-line' />}>
-           <MenuItem href='/orders/create'>Create Purchase Order</MenuItem>
-           <MenuItem href='/orders'>View Purchase Orders</MenuItem>
-           <MenuItem href='/orders/receive'>Receive Items</MenuItem>
-        </SubMenu>
-      <SubMenu label='Vendors' icon={<i className='ri-truck-line' />}>
-  <MenuItem href='/vendors'>View Vendors</MenuItem>
-  <MenuItem href='/vendors/create'>Add Vendor</MenuItem>
+        <SubMenu label='Sales' icon={<i className='ri-money-dollar-circle-line' />}>
+  <MenuItem href='/sales/create'>Create Sale/Order</MenuItem>
+  {/* ADD THIS */}
+  <MenuItem href='/sales'>Sales History</MenuItem>
+  <MenuItem href='/sales/quotes'>Quotes</MenuItem>
+  {/* OPTIONALLY ADD THIS */}
+  <MenuItem href='/sales/returns'>Returns & Refunds</MenuItem>
+  <MenuItem href='/sales/invoices'>Invoices</MenuItem>
 </SubMenu>
-        <MenuItem href='/customers' icon={<i className='ri-user-line' />}>
-          Customers
-        </MenuItem>
 
-        <MenuItem href='/reports' icon={<i className='ri-bar-chart-line' />}>
-          Reports
-        </MenuItem>
+        <SubMenu label='Inventory' icon={<i className='ri-box-3-line' />}>
+          <MenuItem href='/products'>Products</MenuItem>
+          <MenuItem href='/categories'>Categories</MenuItem>
+          <MenuItem href='/inventory'>Stock Levels</MenuItem>
+          <MenuItem href='/inventory/adjustments'>Adjustments</MenuItem>
+        </SubMenu>
+
+        <SubMenu label='Purchasing' icon={<i className='ri-file-list-3-line' />}>
+          <MenuItem href='/orders/create'>Create Order</MenuItem>
+          <MenuItem href='/orders'>Purchase Orders</MenuItem>
+          <MenuItem href='/orders/receive'>Receive Items</MenuItem>
+          <MenuItem href='/vendors'>Vendors</MenuItem>
+        </SubMenu>
+
+        <SubMenu label='Customers' icon={<i className='ri-user-line' />}>
+          <MenuItem href='/customers'>All Customers</MenuItem>
+          <MenuItem href='/customers/groups'>Customer Groups</MenuItem>
+          <MenuItem href='/loyalty'>Loyalty Program</MenuItem>
+        </SubMenu>
 
         <SubMenu label='Staff' icon={<i className='ri-team-line' />}>
           <MenuItem href='/staff'>Team Members</MenuItem>
           <MenuItem href='/roles'>Roles & Permissions</MenuItem>
+          <MenuItem href='/shifts'>Shift Management</MenuItem>
+        </SubMenu>
+
+        <SubMenu label='Reports' icon={<i className='ri-bar-chart-line' />}>
+          <MenuItem href='/reports/sales'>Sales Reports</MenuItem>
+          <MenuItem href='/reports/inventory'>Inventory Reports</MenuItem>
+          <MenuItem href='/reports/financial'>Financial Summary</MenuItem>
         </SubMenu>
 
         <MenuItem href='/banking' icon={<i className='ri-bank-line' />}>

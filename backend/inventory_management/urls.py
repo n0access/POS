@@ -41,6 +41,7 @@ urlpatterns = [
     path('api/', include('inventory.urls')),
     path('api/', include('vendors.urls')),
     path('api/', include('purchase_orders.urls')),
+    path('sales/', include('sales.urls')),
     path('api/', include('accounts.urls')),
     path ('', redirect_to_login),  # Redirect root URL
    # path('inventory/', include('inventory.urls')),  # Include the inventory app URLs

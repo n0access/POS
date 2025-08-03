@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_select2',
     'accounts',
     'inventory',
+    'sales',
     'vendors',
     'purchase_orders',
     'crispy_forms',
