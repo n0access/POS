@@ -39,6 +39,7 @@ def redirect_to_login(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('inventory.urls')),
+    path('api/inventory/', include('inventory.api_urls')),
     path('api/', include('vendors.urls')),
     path('api/', include('purchase_orders.urls')),
     path('sales/', include('sales.urls')),

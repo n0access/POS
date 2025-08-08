@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import InventoryItem
 
+
+
 class InventoryItemSerializer(serializers.ModelSerializer):
     inventory_total_cost = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
     inventory_total_value = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)

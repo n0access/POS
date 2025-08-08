@@ -83,7 +83,7 @@ const CreateSalePage = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/inventory/products/`, {
+      const response = await fetch(`${API_BASE_URL}/items/`, {
         headers: {
           'Content-Type': 'application/json',
         }
